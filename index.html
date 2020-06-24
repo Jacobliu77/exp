@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hello Qunee for HTML5</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div style="height: 500px;" id="canvas" />
+    <script src="./js/qunee/qunee-min.js"></script>
+
+    <script>
+        var nodedata = [
+            { hascloud: false, cloudName: null, ishome: true, name: 'A01_1', x: 0, y: -100 },
+            { hascloud: true, cloudName: 'zoom', ishome: false, name: 'A01_2', x: -220, y: 110 },
+            { hascloud: false, cloudName: null, ishome: false, name: 'A01_3', x: -110, y: 110 },
+            { hascloud: true, cloudName: 'zoom', ishome: false, name: 'A01_4', x: 0, y: 110 },
+            { hascloud: false, cloudName: null, ishome: false, name: 'A01_5', x: 110, y: 110 },
+            { hascloud: true, cloudName: 'amazon', ishome: false, name: 'A01_6', x: 220, y: 110 }
+        ];
+        var graph = new Q.Graph('canvas');
+
+        for (var i = 0; i < nodedata.length; i++) {
+            if (nodedata[i].ishome) {
+                var home = graph.createNode(nodedata[i].name, nodedata[i].x, nodedata[i].y);
+                home.image = "./img/nodeb.png";
+                home.size = { width: 50 };
+                if (nodedata[i].hascloud) {
+                    if (nodedata[i].cloudName == 'zoom') {
+                        if (zoom) {
+                            var edge = graph.createEdge("", zoom, home);
+                            edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
+                            edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                        } else {
+                            var zoom = graph.createNode('zoom', -220, -100);
+                            zoom.image = "./img/cloudOfZoom.png";
+                            zoom.size = { width: 70 };
+                            var edge = graph.createEdge("", zoom, home);
+                            edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
+                            edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                        }
+                    } else {
+                        if (amazon) {
+                            var edge = graph.createEdge("", amazon, home);
+                            edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
+                            edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                        } else {
+                            var amazon = graph.createNode('amazon', 220, -100);
+                            amazon.image = "./img/cloudOfAmazon.png";
+                            amazon.size = { width: 60 };
+                            var edge = graph.createEdge("", amazon, home);
+                            edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
+                            edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                        }
+                    }
+                }
+            } else {
+                var node = graph.createNode(nodedata[i].name, nodedata[i].x, nodedata[i].y);
+                node.image = "./img/nodea.png";
+                node.size = { width: 50 };
+                var edge = graph.createEdge("", home, node);
+                edge.setStyle(Q.Styles.EDGE_COLOR, '#348498');
+                edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                if (nodedata[i].hascloud) {
+                    if (nodedata[i].cloudName == 'zoom') {
+                        if (zoom) {
+                            var edge = graph.createEdge("", zoom, node);
+                            edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
+                            edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                        } else {
+                            var zoom = graph.createNode('zoom', -220, -100);
+                            zoom.image = "./img/cloudOfZoom.png";
+                            zoom.size = { width: 70 };
+                            var edge = graph.createEdge("", zoom, node);
+                            edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
+                            edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                        }
+                    } else {
+                        if (amazon) {
+                            var edge = graph.createEdge("", amazon, node);
+                            edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
+                            edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                        } else {
+                            var amazon = graph.createNode('amazon', 220, -100);
+                            amazon.image = "./img/cloudOfAmazon.png";
+                            amazon.size = { width: 60 };
+                            var edge = graph.createEdge("", amazon, node);
+                            edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
+                            edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+
+        // var edge = graph.createEdge("Hello\nQunee", hello);
+    </script>
+</body>
+
+</html>
