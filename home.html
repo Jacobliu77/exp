@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Hello Qunee for HTML5</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div style="height: 100vh;" id="canvas" />
+    <script src="./js/qunee/qunee-min.js"></script>
+
+    <script>
+        /**
+* This file is part of Qunee for HTML5.
+* Copyright (c) 2016 by qunee.com
+**/
+        var graph = new Q.Graph('canvas');
+        var nodeWithLabels = graph.createNode("Node with Labels", 0, -110);
+        var label2 = new Q.LabelUI();
+        label2.position = Q.Position.CENTER_TOP;
+        label2.anchorPosition = Q.Position.CENTER_BOTTOM;
+        label2.border = 1;
+        label2.padding = new Q.Insets(2, 5);
+        label2.showPointer = true;
+        label2.offsetY = -10;
+        label2.backgroundColor = "#cccccc";
+        label2.fontSize = 16;
+        label2.fontStyle = "italic 100";
+        nodeWithLabels.addUI(label2, [{
+            property: "label2",
+            propertyType: Q.Consts.PROPERTY_TYPE_CLIENT,
+            bindingProperty: "data"
+        }, {
+            property: "label2.color",
+            propertyType: Q.Consts.PROPERTY_TYPE_CLIENT,
+            bindingProperty: "color"
+        }]);
+        nodeWithLabels.set("label2", "another label");
+        nodeWithLabels.set("label2.color", "#ffffff");
+    </script>
+</body>
+
+</html>
