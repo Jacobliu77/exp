@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <div style="height: 500px;" id="canvas" />
+    <div style="height: 100vh;" id="canvas" />
     <script src="./js/qunee/qunee-min.js"></script>
 
     <script>
@@ -22,72 +22,97 @@
         var graph = new Q.Graph('canvas');
 
         for (var i = 0; i < nodedata.length; i++) {
+            //判断是否为总部节点
             if (nodedata[i].ishome) {
                 var home = graph.createNode(nodedata[i].name, nodedata[i].x, nodedata[i].y);
                 home.image = "./img/nodeb.png";
                 home.size = { width: 50 };
+                //判断是否存在云直连服务
                 if (nodedata[i].hascloud) {
+                    //判断是否为zoom服务
                     if (nodedata[i].cloudName == 'zoom') {
+                        //判断是否存在zoom节点
                         if (zoom) {
-                            var edge = graph.createEdge("", zoom, home);
+                            var edge = graph.createEdge(zoom, home);
                             edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                             edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                            edge.setStyle(Q.Styles.ARROW_TO, false);
                         } else {
+                            //不存在创建云直连服务节点
                             var zoom = graph.createNode('zoom', -220, -100);
                             zoom.image = "./img/cloudOfZoom.png";
                             zoom.size = { width: 70 };
-                            var edge = graph.createEdge("", zoom, home);
+                            var edge = graph.createEdge(zoom, home);
                             edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                             edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                            edge.setStyle(Q.Styles.ARROW_TO, false);
                         }
                     } else {
+                        //else条件进入即为存在Amazon云直连服务
+                        //判断是否存在Amazon节点
                         if (amazon) {
-                            var edge = graph.createEdge("", amazon, home);
+                            var edge = graph.createEdge(amazon, home);
                             edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                             edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                            edge.setStyle(Q.Styles.ARROW_TO, false);
                         } else {
+                            //不存在就创建云直连节点
                             var amazon = graph.createNode('amazon', 220, -100);
                             amazon.image = "./img/cloudOfAmazon.png";
                             amazon.size = { width: 60 };
-                            var edge = graph.createEdge("", amazon, home);
+                            var edge = graph.createEdge(amazon, home);
                             edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                             edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                            edge.setStyle(Q.Styles.ARROW_TO, false);
                         }
                     }
                 }
             } else {
+                //进入条件为非总部节点是分支机构节点
                 var node = graph.createNode(nodedata[i].name, nodedata[i].x, nodedata[i].y);
                 node.image = "./img/nodea.png";
                 node.size = { width: 50 };
-                var edge = graph.createEdge("", home, node);
+                var edge = graph.createEdge(home, node);
                 edge.setStyle(Q.Styles.EDGE_COLOR, '#348498');
                 edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                edge.setStyle(Q.Styles.ARROW_TO, false);
+                //判断分支机构节点是否存在云直连服务
                 if (nodedata[i].hascloud) {
+                    //云直连服务是否为zoom
                     if (nodedata[i].cloudName == 'zoom') {
+                        //判断当前图内是否存在zoom节点
                         if (zoom) {
-                            var edge = graph.createEdge("", zoom, node);
+                            var edge = graph.createEdge(zoom, node);
                             edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                             edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                            edge.setStyle(Q.Styles.ARROW_TO, false);
                         } else {
+                            //不存在就创建zoom节点
                             var zoom = graph.createNode('zoom', -220, -100);
                             zoom.image = "./img/cloudOfZoom.png";
                             zoom.size = { width: 70 };
-                            var edge = graph.createEdge("", zoom, node);
+                            var edge = graph.createEdge(zoom, node);
                             edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                             edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                            edge.setStyle(Q.Styles.ARROW_TO, false);
                         }
                     } else {
+                        //else进入条件是存在Amazon云直连服务
+                        //判断图内是否存在Amazon节点
                         if (amazon) {
-                            var edge = graph.createEdge("", amazon, node);
+                            var edge = graph.createEdge(amazon, node);
                             edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                             edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                            edge.setStyle(Q.Styles.ARROW_TO, false);
                         } else {
+                            //不存在节点就创建
                             var amazon = graph.createNode('amazon', 220, -100);
                             amazon.image = "./img/cloudOfAmazon.png";
                             amazon.size = { width: 60 };
-                            var edge = graph.createEdge("", amazon, node);
+                            var edge = graph.createEdge(amazon, node);
                             edge.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                             edge.setStyle(Q.Styles.EDGE_WIDTH, 2);
+                            edge.setStyle(Q.Styles.ARROW_TO, false);
                         }
 
                     }
