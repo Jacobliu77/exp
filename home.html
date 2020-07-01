@@ -9,14 +9,16 @@
 <body>
 
     <div style="height: 100vh;" id="canvas" />
+    <!-- <button id="btn" onclick=" btnclick()">下载图片</button> -->
     <script src="./js/qunee/qunee-min.js"></script>
+    <script src="./js/html2canvas.min.js"></script>
 
     <script>
         //准备渲染数据
         var netData = {
             cloud: true,
             networking: true,
-            portsStatus: [1, 1, 1, 3]
+            portsStatus: [1, 1, 1, 1]
         };
         //初始化画布
         var graph = new Q.Graph('canvas');
@@ -24,21 +26,29 @@
         var server = graph.createNode('', -205, -100);
         server.image = "./img/server.png";
         server.size = { width: 80 };
+        server.movable = false;
+        server.zIndex = 10;
         //绘制终端点盒子
         var box = graph.createNode('A01_1\na9b7ba70783b617e9998dc4dd82eb3c5', -110, 100);
         box.image = "./img/box.png";
         box.size = { width: 300 };
+        box.movable = false;
+        box.zIndex = 10;
+
         //判断该终端点是否有云直连服务
         if (netData.cloud) {
             //绘制w1口
             var w1 = graph.createNode('', -205, 100);
             w1.image = "./img/w1.png";
             w1.size = { width: 68 };
+            w1.movable = false;
+            w1.zIndex = 15;
             //绘制w1到远端服务的物理线路
             var edgea = graph.createEdge(server, w1);
             edgea.setStyle(Q.Styles.EDGE_COLOR, '#cccccc');
             edgea.setStyle(Q.Styles.EDGE_WIDTH, 25);
             edgea.setStyle(Q.Styles.ARROW_TO, false);
+            edgea.zIndex = 15;
             //判断该终端点是否存在组网服务
             if (netData.networking) {
                 //进入条件是存在云直连服务且存在组网服务
@@ -46,29 +56,40 @@
                 var cloud = graph.createNode('', -213, -75);
                 cloud.image = "./img/cloudServer.png";
                 cloud.size = { width: 30 };
+                cloud.movable = false;
+                cloud.zIndex = 15;
                 //绘制组网服务
                 var networking = graph.createNode('', -198, -75);
                 networking.image = "./img/zuwangServer.png";
                 networking.size = { width: 30 };
+                networking.movable = false;
+                networking.zIndex = 15;
                 //云直连虚拟端口
                 var cloudPort = graph.createNode('', -213, 105);
                 cloudPort.image = "./img/yunzhilianPort.png";
                 cloudPort.size = { width: 18 };
+                cloudPort.movable = false;
+                cloudPort.zIndex = 20;
                 //组网虚拟端口
                 var networkingPort = graph.createNode('', -198, 105);
                 networkingPort.image = "./img/zuwangPort.png";
                 networkingPort.size = { width: 18 };
+                networkingPort.movable = false;
+                networkingPort.zIndex = 20;
                 //服务与端口间的连线
                 //云直连
                 var edgeb = graph.createEdge(cloud, cloudPort);
                 edgeb.setStyle(Q.Styles.EDGE_COLOR, '#34A5DA');
                 edgeb.setStyle(Q.Styles.EDGE_WIDTH, 3);
                 edgeb.setStyle(Q.Styles.ARROW_TO, false);
+                edgeb.zIndex = 20;
                 //组网
                 var edgec = graph.createEdge(networking, networkingPort);
                 edgec.setStyle(Q.Styles.EDGE_COLOR, '#348498');
                 edgec.setStyle(Q.Styles.EDGE_WIDTH, 3);
                 edgec.setStyle(Q.Styles.ARROW_TO, false);
+                edgec.zIndex = 20;
+
 
             } else {
                 //进入条件存在云直连服务但不存在组网服务
@@ -92,24 +113,33 @@
             var w1 = graph.createNode('', -205, 100);
             w1.image = "./img/w1.png";
             w1.size = { width: 68 };
+            w1.movable = false;
+            w1.zIndex = 15;
             //服务与端口的物理连接
             var edgea = graph.createEdge(server, w1);
             edgea.setStyle(Q.Styles.EDGE_COLOR, '#cccccc');
             edgea.setStyle(Q.Styles.EDGE_WIDTH, 25);
             edgea.setStyle(Q.Styles.ARROW_TO, false);
+            edgea.zIndex = 15;
             //绘制组网服务
             var networking = graph.createNode('', -205, -75);
             networking.image = "./img/zuwangServer.png";
             networking.size = { width: 30 };
+            networking.movable = false;
+            networking.zIndex = 15;
             //绘制组网虚拟端口
             var networkingPort = graph.createNode('', -205, 105);
             networkingPort.image = "./img/zuwangPort.png";
             networkingPort.size = { width: 18 };
+            networkingPort.movable = false;
+            networkingPort.zIndex = 20;
             //服务与端口连线
             var edgec = graph.createEdge(networking, networkingPort);
             edgec.setStyle(Q.Styles.EDGE_COLOR, '#348498');
             edgec.setStyle(Q.Styles.EDGE_WIDTH, 3);
             edgec.setStyle(Q.Styles.ARROW_TO, false);
+            edgec.zIndex = 20;
+
         }
         //循环遍历端口状态
         for (var i = 0; i < netData.portsStatus.length; i++) {
@@ -120,50 +150,68 @@
                     var red = graph.createNode('', -163, 85);
                     red.image = "./img/red.png";
                     red.size = { width: 10 };
+                    red.movable = false;
+                    red.zIndex = 30;
                     //L1口和状态为1绿色正常
                 } else if (netData.portsStatus[i] == 1) {
                     //绘制端口
                     var other = graph.createNode('', -138, 99);
                     other.image = "./img/otherport.png";
                     other.size = { width: 68 };
+                    other.movable = false;
+                    other.zIndex = 15;
                     //绘制端口状态
                     var green = graph.createNode('', -163, 85);
                     green.image = "./img/green.png";
                     green.size = { width: 10 };
+                    green.movable = false;
+                    green.zIndex = 30;
                     //绘制端口链接的路由
                     var router = graph.createNode('', -205, 240);
                     router.image = "./img/jiaohuanji.png";
                     router.size = { width: 108 };
+                    router.movable = false;
+                    router.zIndex = 20;
                     //绘制路由连接的子网
                     var subnet = graph.createNode('', -205, 380);
                     subnet.image = "./img/ziwang.png";
                     subnet.size = { width: 148 };
+                    subnet.movable = false;
+                    subnet.zIndex = 20;
                     //绘制路由与端口间的连线
                     var edgef = graph.createEdge(other, router);
                     edgef.setStyle(Q.Styles.EDGE_COLOR, '#696969');
                     edgef.setStyle(Q.Styles.EDGE_WIDTH, 3);
                     edgef.setStyle(Q.Styles.ARROW_TO, false);
+                    edgef.zIndex = 20;
                     //绘制路由与子网间的连线
                     var edgeg = graph.createEdge(subnet, router);
                     edgeg.setStyle(Q.Styles.EDGE_COLOR, '#696969');
                     edgeg.setStyle(Q.Styles.EDGE_WIDTH, 3);
                     edgeg.setStyle(Q.Styles.ARROW_TO, false);
+                    edgeg.zIndex = 20;
                     //L1口和状态为2黄色故障
                 } else if (netData.portsStatus[i] == 2) {
                     //绘制L1端口
                     var other = graph.createNode('', -138, 99);
                     other.image = "./img/otherport.png";
                     other.size = { width: 68 };
+                    other.movable = false;
+                    other.zIndex = 15;
                     //绘制端口状态灯
                     var yellow = graph.createNode('', -163, 85);
                     yellow.image = "./img/yellow.png";
                     yellow.size = { width: 10 };
+                    yellow.movable = false;
+                    yellow.zIndex = 30;
                     //L1口和状态为3灰色未在使用
                 } else if (netData.portsStatus[i] == 3) {
                     //绘制端口状态灯
                     var gray = graph.createNode('', -163, 85);
                     gray.image = "./img/gray.png";
                     gray.size = { width: 10 };
+                    gray.movable = false;
+                    gray.zIndex = 30;
                 }
             } else if (i == 2) {
                 //L2口
@@ -172,41 +220,59 @@
                     var red = graph.createNode('', -97, 85);
                     red.image = "./img/red.png";
                     red.size = { width: 10 };
+                    red.movable = false;
+                    red.zIndex = 30;
                     //L2口状态为1的时候绿色正常
                 } else if (netData.portsStatus[i] == 1) {
                     var other = graph.createNode('', -71, 99);
                     other.image = "./img/otherport.png";
                     other.size = { width: 68 };
+                    other.movable = false;
+                    other.zIndex = 15;
                     var green = graph.createNode('', -97, 85);
                     green.image = "./img/green.png";
                     green.size = { width: 10 };
+                    green.movable = false;
+                    green.zIndex = 30;
                     var router = graph.createNode('', -50, 240);
                     router.image = "./img/jiaohuanji.png";
                     router.size = { width: 108 };
+                    router.movable = false;
+                    router.zIndex = 20;
                     var subnet = graph.createNode('', -50, 380);
                     subnet.image = "./img/ziwang.png";
                     subnet.size = { width: 148 };
+                    subnet.movable = false;
+                    subnet.zIndex = 15;
                     var edgef = graph.createEdge(other, router);
                     edgef.setStyle(Q.Styles.EDGE_COLOR, '#696969');
                     edgef.setStyle(Q.Styles.EDGE_WIDTH, 3);
                     edgef.setStyle(Q.Styles.ARROW_TO, false);
+                    edgef.zIndex = 20;
                     var edgeg = graph.createEdge(subnet, router);
                     edgeg.setStyle(Q.Styles.EDGE_COLOR, '#696969');
                     edgeg.setStyle(Q.Styles.EDGE_WIDTH, 3);
                     edgeg.setStyle(Q.Styles.ARROW_TO, false);
+                    edgeg.zIndex = 20;
                     //L2口状态为2的时候黄色故障
                 } else if (netData.portsStatus[i] == 2) {
                     var other = graph.createNode('', -73, 99);
                     other.image = "./img/otherport.png";
                     other.size = { width: 68 };
+                    other.movable = false;
+                    other.zIndex = 15;
                     var yellow = graph.createNode('', -97, 85);
                     yellow.image = "./img/yellow.png";
                     yellow.size = { width: 10 };
+                    yellow.movable = false;
+                    yellow.zIndex = 30;
                     //L2口状态为3的时候灰色未在使用
                 } else if (netData.portsStatus[i] == 3) {
                     var gray = graph.createNode('', -97, 85);
                     gray.image = "./img/gray.png";
                     gray.size = { width: 10 };
+                    gray.movable = false;
+                    gray.zIndex = 30;
                 }
             } else if (i == 3) {
                 //box4号口
@@ -215,41 +281,59 @@
                     var red = graph.createNode('', -29, 85);
                     red.image = "./img/red.png";
                     red.size = { width: 10 };
+                    red.movable = false;
+                    red.zIndex = 30;
                     //4号口状态为1的时候绿色正常
                 } else if (netData.portsStatus[i] == 1) {
                     var other = graph.createNode('', -5, 99);
                     other.image = "./img/otherport.png";
                     other.size = { width: 68 };
+                    other.movable = false;
+                    other.zIndex = 15;
                     var green = graph.createNode('', -29, 85);
                     green.image = "./img/green.png";
                     green.size = { width: 10 };
+                    green.movable = false;
+                    green.zIndex = 30;
                     var router = graph.createNode('', 105, 240);
                     router.image = "./img/jiaohuanji.png";
                     router.size = { width: 108 };
+                    router.movable = false;
+                    router.zIndex = 20;
                     var subnet = graph.createNode('', 105, 380);
                     subnet.image = "./img/ziwang.png";
                     subnet.size = { width: 148 };
+                    subnet.movable = false;
+                    subnet.zIndex = 15;
                     var edgef = graph.createEdge(other, router);
                     edgef.setStyle(Q.Styles.EDGE_COLOR, '#696969');
                     edgef.setStyle(Q.Styles.EDGE_WIDTH, 3);
                     edgef.setStyle(Q.Styles.ARROW_TO, false);
+                    edgef.zIndex = 20;
                     var edgeg = graph.createEdge(subnet, router);
                     edgeg.setStyle(Q.Styles.EDGE_COLOR, '#696969');
                     edgeg.setStyle(Q.Styles.EDGE_WIDTH, 3);
                     edgeg.setStyle(Q.Styles.ARROW_TO, false);
+                    edgeg.zIndex = 20;
                     //4号口状态为2的时候黄色故障
                 } else if (netData.portsStatus[i] == 2) {
                     var other = graph.createNode('', -5, 99);
                     other.image = "./img/otherport.png";
                     other.size = { width: 68 };
+                    other.movable = false;
+                    other.zIndex = 15;
                     var yellow = graph.createNode('', -29, 85);
                     yellow.image = "./img/yellow.png";
                     yellow.size = { width: 10 };
+                    yellow.movable = false;
+                    yellow.zIndex = 30;
                     //4号口状态为3的时候灰色未在使用
                 } else if (netData.portsStatus[i] == 3) {
                     var gray = graph.createNode('', -29, 85);
                     gray.image = "./img/gray.png";
                     gray.size = { width: 10 };
+                    gray.movable = false;
+                    gray.zIndex = 30;
                 }
             } else if (i == 0) {
                 //w1口
@@ -258,21 +342,29 @@
                     var red = graph.createNode('', -230, 85);
                     red.image = "./img/red.png";
                     red.size = { width: 10 };
+                    red.movable = false;
+                    red.zIndex = 30;
                     //w1口状态为1的时候绿色正常
                 } else if (netData.portsStatus[i] == 1) {
                     var green = graph.createNode('', -230, 85);
                     green.image = "./img/green.png";
                     green.size = { width: 10 };
+                    green.movable = false;
+                    green.zIndex = 30;
                     //w1口状态为2的时候黄色故障
                 } else if (netData.portsStatus[i] == 2) {
                     var yellow = graph.createNode('', -230, 85);
                     yellow.image = "./img/yellow.png";
                     yellow.size = { width: 10 };
+                    yellow.movable = false;
+                    yellow.zIndex = 30;
                     //w1口状态为3的时候灰色未在使用
                 } else if (netData.portsStatus[i] == 3) {
                     var gray = graph.createNode('', -230, 85);
                     gray.image = "./img/gray.png";
                     gray.size = { width: 10 };
+                    gray.movable = false;
+                    gray.zIndex = 30;
                 }
             }
 
